@@ -17,6 +17,24 @@
   --text-dim: #777;
   --glass: rgba(255,255,255,0.03);
   --glass-border: rgba(255,255,255,0.06);
+  --bg: #000000;
+  --card-bg: rgba(255,255,255,0.03);
+  --nav-bg: rgba(0,0,0,0.85);
+}
+
+body.light {
+  --bg: #FAFAF7;
+  --black: #FAFAF7;
+  --charcoal: #F0F0EB;
+  --text: #1A1A1A;
+  --text-dim: #666;
+  --glass: rgba(0,0,0,0.03);
+  --glass-border: rgba(0,0,0,0.08);
+  --card-bg: rgba(0,0,0,0.03);
+  --nav-bg: rgba(250,250,247,0.85);
+  --gold: #B8860B;
+  --gold-light: #D4A853;
+  --gold-dark: #8B6508;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -37,7 +55,23 @@ nav {
   padding:24px 60px;display:flex;justify-content:space-between;align-items:center;
   transition:background 0.4s;
 }
-nav.scrolled { background:rgba(0,0,0,0.85);backdrop-filter:blur(20px); }
+nav.scrolled { background:var(--nav-bg);backdrop-filter:blur(20px); }
+
+/* Theme & Lang toggles */
+.nav-controls { display:flex;gap:12px;align-items:center; }
+.toggle-btn { background:none;border:1px solid var(--glass-border);color:var(--text-dim);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s; }
+.toggle-btn:hover { border-color:var(--gold);color:var(--gold); }
+body.light .orb { opacity:0.03; }
+body.light .coin-outer { box-shadow:0 0 60px rgba(184,134,11,0.2),0 0 120px rgba(184,134,11,0.08); }
+body.light .eco-card { background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.06); }
+body.light .eco-card:hover { background:rgba(0,0,0,0.04); }
+body.light .phone-frame { background:linear-gradient(145deg,#e8e8e0,#f5f5ed);border-color:#ddd;box-shadow:0 40px 80px rgba(0,0,0,0.1); }
+body.light .game-card { background:rgba(184,134,11,0.08);border-color:rgba(184,134,11,0.2); }
+body.light .gb-input { background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.1);color:var(--text); }
+body.light .gb-input::placeholder { color:rgba(0,0,0,0.3); }
+body.light .token-bar { background:rgba(0,0,0,0.02);border-color:rgba(184,134,11,0.15); }
+body.light .roadmap-dot { background:var(--bg); }
+body.light .hero-title { background:linear-gradient(180deg,#1A1A1A 0%,#444 100%);-webkit-background-clip:text; }
 .logo { font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--gold);letter-spacing:3px;text-decoration:none; }
 .nav-center { display:flex;gap:36px;list-style:none; }
 .nav-center a { color:var(--text-dim);text-decoration:none;font-size:0.85rem;font-weight:400;letter-spacing:1px;transition:color 0.3s; }
@@ -112,6 +146,23 @@ section { position:relative;z-index:1;padding:120px 24px;max-width:1200px;margin
 .phone-screen { width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px; }
 .game-card { aspect-ratio:0.75;border-radius:10px;background:linear-gradient(135deg,rgba(212,168,83,0.15),rgba(212,168,83,0.05));border:1px solid rgba(212,168,83,0.25);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all 0.3s;cursor:pointer; }
 .game-card:hover { transform:scale(1.08);border-color:var(--gold); }
+.game-card.flip { animation:cardFlip 0.6s ease; }
+.game-card.match { background:rgba(212,168,83,0.3);border-color:var(--gold);box-shadow:0 0 15px rgba(212,168,83,0.3); }
+
+/* TOKEN RAIN */
+.token-rain { position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:2; }
+.rain-token { position:absolute;font-size:1.2rem;opacity:0;animation:tokenFall linear forwards;filter:drop-shadow(0 0 6px rgba(212,168,83,0.4)); }
+@keyframes tokenFall {
+  0% { opacity:0;transform:translateY(-20px) rotate(0deg) scale(0.5); }
+  10% { opacity:1;transform:translateY(0) rotate(20deg) scale(1); }
+  80% { opacity:0.8; }
+  100% { opacity:0;transform:translateY(500px) rotate(360deg) scale(0.3); }
+}
+@keyframes cardFlip {
+  0% { transform:scale(1) rotateY(0deg); }
+  50% { transform:scale(1.15) rotateY(90deg);background:rgba(212,168,83,0.3); }
+  100% { transform:scale(1) rotateY(0deg); }
+}
 .phone-glow { position:absolute;width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(212,168,83,0.1) 0%,transparent 70%);pointer-events:none; }
 .meefster-info h2 { font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;margin-bottom:20px;line-height:1.2; }
 .meefster-info h2 .gold { color:var(--gold); }
@@ -228,13 +279,17 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <nav id="mainNav">
   <a href="#" class="logo">MEEF</a>
   <ul class="nav-center">
-    <li><a href="#ecosystem">Ekosistem</a></li>
-    <li><a href="#tech">Vizyon</a></li>
+    <li><a href="#ecosystem" data-tr="Ekosistem" data-en="Ecosystem">Ekosistem</a></li>
+    <li><a href="#tech" data-tr="Vizyon" data-en="Vision">Vizyon</a></li>
     <li><a href="#meefster">MEEFSTER</a></li>
-    <li><a href="#roadmap">Yol Haritası</a></li>
-    <li><a href="#community">Topluluk</a></li>
+    <li><a href="#roadmap" data-tr="Yol Haritası" data-en="Roadmap">Yol Haritası</a></li>
+    <li><a href="#community" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
   </ul>
-  <a href="#meefster" class="nav-cta">MEEFSTER</a>
+  <div class="nav-controls">
+    <button class="toggle-btn" onclick="toggleTheme()" title="Tema Değiştir" id="themeBtn">☀️</button>
+    <button class="toggle-btn" onclick="toggleLang()" title="Language" id="langBtn">EN</button>
+    <a href="#meefster" class="nav-cta">MEEFSTER</a>
+  </div>
   <button class="mobile-menu" onclick="document.querySelector('.nav-center').classList.toggle('open')">☰</button>
 </nav>
 
@@ -247,11 +302,11 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
     </div>
   </div>
   <h1 class="hero-title">MEEF</h1>
-  <p class="hero-slogan">Dijital emeğin, gerçek değerin</p>
-  <p class="hero-sub">Dikkat ekonomisini demokratikleştiren, dijital emeğinin karşılığını sana veren blockchain ekosistemi.</p>
+  <p class="hero-slogan" data-tr="Dijital emeğin, gerçek değerin" data-en="Your digital labor, your real value">Dijital emeğin, gerçek değerin</p>
+  <p class="hero-sub" data-tr="Dikkat ekonomisini demokratikleştiren, dijital emeğinin karşılığını sana veren blockchain ekosistemi." data-en="A blockchain ecosystem that democratizes the attention economy and rewards your digital labor.">Dikkat ekonomisini demokratikleştiren, dijital emeğinin karşılığını sana veren blockchain ekosistemi.</p>
   <div class="hero-buttons">
-    <a href="#ecosystem" class="btn-gold">Ekosistemi Keşfet</a>
-    <a href="#roadmap" class="btn-glass">Yol Haritası</a>
+    <a href="#ecosystem" class="btn-gold" data-tr="Ekosistemi Keşfet" data-en="Explore Ecosystem">Ekosistemi Keşfet</a>
+    <a href="#roadmap" class="btn-glass" data-tr="Yol Haritası" data-en="Roadmap">Yol Haritası</a>
   </div>
   <div class="hero-stats">
     <div class="hero-stat"><span class="dot"></span>BEP-20 Token</div>
@@ -268,28 +323,28 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <div class="problem-section" id="tech">
   <div class="problem-inner">
     <div class="reveal">
-      <div class="section-tag">Vizyon</div>
-      <h2 class="section-title">Dikkat Ekonomisinde<br>Devrim Zamanı</h2>
+      <div class="section-tag" data-tr="Vizyon" data-en="Vision">Vizyon</div>
+      <h2 class="section-title" data-tr="Dikkat Ekonomisinde Devrim Zamanı" data-en="Time to Revolutionize the Attention Economy">Dikkat Ekonomisinde<br>Devrim Zamanı</h2>
     </div>
     <div class="problem-grid reveal">
       <div>
         <div class="problem-stat">
           <div class="problem-number">$500B+</div>
-          <div class="problem-label">Yıllık Global Reklam Geliri</div>
+          <div class="problem-label" data-tr="Yıllık Global Reklam Geliri" data-en="Annual Global Ad Revenue">Yıllık Global Reklam Geliri</div>
         </div>
         <div class="problem-stat">
           <div class="problem-number">%0</div>
-          <div class="problem-label">Kullanıcıya Dönen Pay</div>
+          <div class="problem-label" data-tr="Kullanıcıya Dönen Pay" data-en="User's Share">Kullanıcıya Dönen Pay</div>
         </div>
       </div>
       <div class="problem-text">
         <div class="solution-badge">Problem</div>
-        <h3>Dijital emeğin karşılıksız kalıyor</h3>
-        <p>Her gün milyarlarca saat reklam izleniyor, veri üretiliyor, içerik tüketiliyor. Teknoloji devleri bu dikkatten yüz milyarlarca dolar kazanıyor. Ama bu değeri yaratan insanlara — sana — geri dönen pay sıfır.</p>
+        <h3 data-tr="Dijital emeğin karşılıksız kalıyor" data-en="Your digital labor goes unrewarded">Dijital emeğin karşılıksız kalıyor</h3>
+        <p data-tr="Her gün milyarlarca saat reklam izleniyor, veri üretiliyor, içerik tüketiliyor. Teknoloji devleri bu dikkatten yüz milyarlarca dolar kazanıyor. Ama bu değeri yaratan insanlara — sana — geri dönen pay sıfır." data-en="Billions of hours of ads watched, data generated, content consumed every day. Tech giants earn hundreds of billions from this attention. But the share returning to the people who create this value — to you — is zero.">Her gün milyarlarca saat reklam izleniyor, veri üretiliyor, içerik tüketiliyor. Teknoloji devleri bu dikkatten yüz milyarlarca dolar kazanıyor. Ama bu değeri yaratan insanlara — sana — geri dönen pay sıfır.</p>
         <br>
-        <div class="solution-badge" style="background:rgba(212,168,83,0.15);border-color:var(--gold);">Çözüm</div>
-        <h3>MEEF bunu değiştiriyor</h3>
-        <p>MEEF ekosistemi, dijital emeğini ölçer, tokenize eder ve gerçek değere dönüştürür. Reklam izledin — emeğinin karşılığını aldın. Zaman harcadın — değerin sana döndü. Artık dikkat ekonomisinin gelirinden sen de pay alıyorsun.</p>
+        <div class="solution-badge" style="background:rgba(212,168,83,0.15);border-color:var(--gold);" data-tr="Çözüm" data-en="Solution">Çözüm</div>
+        <h3 data-tr="MEEF bunu değiştiriyor" data-en="MEEF changes this">MEEF bunu değiştiriyor</h3>
+        <p data-tr="MEEF ekosistemi, dijital emeğini ölçer, tokenize eder ve gerçek değere dönüştürür. Reklam izledin — emeğinin karşılığını aldın. Zaman harcadın — değerin sana döndü. Artık dikkat ekonomisinin gelirinden sen de pay alıyorsun." data-en="The MEEF ecosystem measures your digital labor, tokenizes it, and converts it into real value. Watched an ad — you got rewarded. Spent time — value returned to you. Now you also get a share of the attention economy's revenue.">MEEF ekosistemi, dijital emeğini ölçer, tokenize eder ve gerçek değere dönüştürür. Reklam izledin — emeğinin karşılığını aldın. Zaman harcadın — değerin sana döndü. Artık dikkat ekonomisinin gelirinden sen de pay alıyorsun.</p>
       </div>
     </div>
   </div>
@@ -298,25 +353,25 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <!-- ═══ ECOSYSTEM ═══ -->
 <section id="ecosystem">
   <div class="reveal">
-    <div class="section-tag">Ekosistem</div>
-    <h2 class="section-title">Tek Ekosistem,<br>Ortak Büyüme</h2>
-    <p class="section-desc">Kullanıcılar kazanır, ekosistem büyür, herkes değer üretir.</p>
+    <div class="section-tag" data-tr="Ekosistem" data-en="Ecosystem">Ekosistem</div>
+    <h2 class="section-title" data-tr="Tek Ekosistem, Ortak Büyüme" data-en="One Ecosystem, Shared Growth">Tek Ekosistem,<br>Ortak Büyüme</h2>
+    <p class="section-desc" data-tr="Kullanıcılar kazanır, ekosistem büyür, herkes değer üretir." data-en="Users earn, the ecosystem grows, everyone creates value.">Kullanıcılar kazanır, ekosistem büyür, herkes değer üretir.</p>
   </div>
   <div class="eco-cards reveal">
     <div class="eco-card">
-      <div class="eco-icon">👁️</div>
-      <h3>Dijital Emek</h3>
-      <p>Zamanın ve dikkatin artık ölçülebilir bir değer. MEEF ekosistemi dijital emeğini tokenize ederek sana geri veriyor.</p>
+      <div class="eco-icon">⏳</div>
+      <h3 data-tr="Dijital Emek" data-en="Digital Labor">Dijital Emek</h3>
+      <p data-tr="Zamanın ve dikkatin artık ölçülebilir bir değer. MEEF ekosistemi dijital emeğini tokenize ederek sana geri veriyor." data-en="Your time and attention are now measurable value. The MEEF ecosystem tokenizes your digital labor and returns it to you.">Zamanın ve dikkatin artık ölçülebilir bir değer. MEEF ekosistemi dijital emeğini tokenize ederek sana geri veriyor.</p>
     </div>
     <div class="eco-card">
       <div class="eco-icon">🪙</div>
       <h3>MEEF Token</h3>
-      <p>BSC üzerinde yükseltilebilir akıllı kontrat. Ekosistemin para birimi, dijital emeğin somut karşılığı.</p>
+      <p data-tr="BSC üzerinde yükseltilebilir akıllı kontrat. Ekosistemin para birimi, dijital emeğin somut karşılığı." data-en="Upgradeable smart contract on BSC. The ecosystem's currency, the tangible reward of your digital labor.">BSC üzerinde yükseltilebilir akıllı kontrat. Ekosistemin para birimi, dijital emeğin somut karşılığı.</p>
     </div>
     <div class="eco-card">
       <div class="eco-icon">🛡️</div>
-      <h3>Güvenlik</h3>
-      <p>SHA-256 şifreleme, çok katmanlı kimlik doğrulama, proxy pattern. Güven altyapısı üzerine inşa edildi.</p>
+      <h3 data-tr="Güvenlik" data-en="Security">Güvenlik</h3>
+      <p data-tr="SHA-256 şifreleme, çok katmanlı kimlik doğrulama, proxy pattern. Güven altyapısı üzerine inşa edildi." data-en="SHA-256 encryption, multi-layer identity verification, proxy pattern. Built on a foundation of trust.">SHA-256 şifreleme, çok katmanlı kimlik doğrulama, proxy pattern. Güven altyapısı üzerine inşa edildi.</p>
     </div>
   </div>
 </section>
@@ -324,38 +379,39 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <!-- ═══ HOW IT WORKS ═══ -->
 <section>
   <div class="reveal">
-    <div class="section-tag">Nasıl Çalışır</div>
-    <h2 class="section-title">Üç Adımda<br>Dijital Emek Ekonomisi</h2>
+    <div class="section-tag" data-tr="Nasıl Çalışır" data-en="How It Works">Nasıl Çalışır</div>
+    <h2 class="section-title" data-tr="Üç Adımda Dijital Emek Ekonomisi" data-en="Digital Labor Economy in Three Steps">Üç Adımda<br>Dijital Emek Ekonomisi</h2>
   </div>
   <div class="steps-grid reveal">
     <div class="step-item">
       <div class="step-number">01</div>
       <div class="step-icon">📱</div>
-      <h4>Katıl</h4>
-      <p>MEEFSTER uygulamasını indir, güvenli kayıt işlemini tamamla ve ekosisteme dahil ol.</p>
+      <h4 data-tr="Katıl" data-en="Join">Katıl</h4>
+      <p data-tr="MEEFSTER uygulamasını indir, güvenli kayıt işlemini tamamla ve ekosisteme dahil ol." data-en="Download MEEFSTER, complete the secure registration, and join the ecosystem.">MEEFSTER uygulamasını indir, güvenli kayıt işlemini tamamla ve ekosisteme dahil ol.</p>
     </div>
     <div class="step-item">
       <div class="step-number">02</div>
       <div class="step-icon">⏱️</div>
-      <h4>Dijital Emek Üret</h4>
-      <p>Oyna, izle, etkileşim kur. Harcadığın her dakika ölçülür ve dijital emeğin olarak kaydedilir.</p>
+      <h4 data-tr="Dijital Emek Üret" data-en="Create Digital Labor">Dijital Emek Üret</h4>
+      <p data-tr="Oyna, izle, etkileşim kur. Harcadığın her dakika ölçülür ve dijital emeğin olarak kaydedilir." data-en="Play, watch, interact. Every minute you spend is measured and recorded as your digital labor.">Oyna, izle, etkileşim kur. Harcadığın her dakika ölçülür ve dijital emeğin olarak kaydedilir.</p>
     </div>
     <div class="step-item">
       <div class="step-number">03</div>
       <div class="step-icon">💰</div>
-      <h4>Değerini Al</h4>
-      <p>Dijital emeğinin karşılığı MEEF token olarak sana geri döner. Biriktir, büyüt, kazan.</p>
+      <h4 data-tr="Değerini Al" data-en="Get Your Value">Değerini Al</h4>
+      <p data-tr="Dijital emeğinin karşılığı MEEF token olarak sana geri döner. Biriktir, büyüt, kazan." data-en="Your digital labor is returned to you as MEEF tokens. Accumulate, grow, earn.">Dijital emeğinin karşılığı MEEF token olarak sana geri döner. Biriktir, büyüt, kazan.</p>
     </div>
   </div>
 </section>
 
 <!-- ═══ MEEFSTER ═══ -->
 <div class="meefster-banner" id="meefster">
+  <div class="token-rain" id="tokenRain"></div>
   <div class="meefster-inner">
     <div class="meefster-visual reveal">
       <div class="phone-glow"></div>
       <div class="phone-frame">
-        <div class="phone-screen">
+        <div class="phone-screen" id="gameScreen">
           <div class="game-card">🎯</div>
           <div class="game-card">💰</div>
           <div class="game-card">🎯</div>
@@ -369,16 +425,16 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
       </div>
     </div>
     <div class="meefster-info reveal">
-      <h2>MEEFSTER<br><span class="gold">Dijital Emeğin İlk Adımı</span></h2>
-      <p>MEEFSTER, dikkat ekonomisine meydan okuyan ilk uygulama. Oynarken, izlerken, etkileşim kurarken dijital emeğinin karşılığını MEEF token olarak alıyorsun.</p>
+      <h2>MEEFSTER<br><span class="gold" data-tr="Dijital Emeğin İlk Adımı" data-en="The First Step of Digital Labor">Dijital Emeğin İlk Adımı</span></h2>
+      <p data-tr="MEEFSTER, dikkat ekonomisine meydan okuyan ilk uygulama. Oynarken, izlerken, etkileşim kurarken dijital emeğinin karşılığını MEEF token olarak alıyorsun." data-en="MEEFSTER is the first app to challenge the attention economy. While playing, watching, and interacting, you receive MEEF tokens as reward for your digital labor.">MEEFSTER, dikkat ekonomisine meydan okuyan ilk uygulama. Oynarken, izlerken, etkileşim kurarken dijital emeğinin karşılığını MEEF token olarak alıyorsun.</p>
       <ul class="feature-list">
-        <li><span class="feature-check">✦</span>Premium 3D kart tasarımı ve hafıza oyunu</li>
-        <li><span class="feature-check">✦</span>Gerçek reklam gelirinden kullanıcıya pay</li>
-        <li><span class="feature-check">✦</span>Aylık liderlik tablosu ve bariyer sistemi</li>
-        <li><span class="feature-check">✦</span>Referans kodu ile büyüyen topluluk</li>
-        <li><span class="feature-check">✦</span>TR/EN çoklu dil desteği</li>
+        <li><span class="feature-check">✦</span><span data-tr="Premium 3D kart tasarımı ve hafıza oyunu" data-en="Premium 3D card design and memory game">Premium 3D kart tasarımı ve hafıza oyunu</span></li>
+        <li><span class="feature-check">✦</span><span data-tr="Gerçek reklam gelirinden kullanıcıya pay" data-en="User share from real ad revenue">Gerçek reklam gelirinden kullanıcıya pay</span></li>
+        <li><span class="feature-check">✦</span><span data-tr="Aylık liderlik tablosu ve bariyer sistemi" data-en="Monthly leaderboard and barrier system">Aylık liderlik tablosu ve bariyer sistemi</span></li>
+        <li><span class="feature-check">✦</span><span data-tr="Referans kodu ile büyüyen topluluk" data-en="Growing community with referral codes">Referans kodu ile büyüyen topluluk</span></li>
+        <li><span class="feature-check">✦</span><span data-tr="TR/EN çoklu dil desteği" data-en="TR/EN multi-language support">TR/EN çoklu dil desteği</span></li>
       </ul>
-      <a href="#community" class="btn-gold">Topluluğa Katıl</a>
+      <a href="#community" class="btn-gold" data-tr="Topluluğa Katıl" data-en="Join Community">Topluluğa Katıl</a>
     </div>
   </div>
 </div>
@@ -411,40 +467,40 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <!-- ═══ ROADMAP ═══ -->
 <section id="roadmap">
   <div class="reveal">
-    <div class="section-tag">Yol Haritası</div>
-    <h2 class="section-title">Büyümenin<br>Adımları</h2>
-    <p class="section-desc">MEEF ekosistemi adım adım dikkat ekonomisinin kurallarını yeniden yazıyor.</p>
+    <div class="section-tag" data-tr="Yol Haritası" data-en="Roadmap">Yol Haritası</div>
+    <h2 class="section-title" data-tr="Büyümenin Adımları" data-en="Steps of Growth">Büyümenin<br>Adımları</h2>
+    <p class="section-desc" data-tr="MEEF ekosistemi adım adım dikkat ekonomisinin kurallarını yeniden yazıyor." data-en="The MEEF ecosystem is rewriting the rules of the attention economy step by step.">MEEF ekosistemi adım adım dikkat ekonomisinin kurallarını yeniden yazıyor.</p>
   </div>
   <div class="roadmap-grid reveal">
     <div class="roadmap-item">
       <div class="roadmap-dot done"></div>
       <div class="roadmap-phase">2026 Q1 — Tamamlandı</div>
-      <h4>Doğuş</h4>
-      <p>MEEF Token BSC mainnet üzerinde yayınlandı. Upgradeable proxy kontrat, %1 vergi yapısı ve temel altyapı kuruldu.</p>
+      <h4 data-tr="Doğuş" data-en="Genesis">Doğuş</h4>
+      <p data-tr="MEEF Token BSC mainnet üzerinde yayınlandı. Upgradeable proxy kontrat, %1 vergi yapısı ve temel altyapı kuruldu." data-en="MEEF Token launched on BSC mainnet. Upgradeable proxy contract, 1% tax structure and core infrastructure established.">MEEF Token BSC mainnet üzerinde yayınlandı. Upgradeable proxy kontrat, %1 vergi yapısı ve temel altyapı kuruldu.</p>
     </div>
     <div class="roadmap-item">
       <div class="roadmap-dot done"></div>
-      <div class="roadmap-phase">2026 Q2 — Tamamlandı</div>
-      <h4>İlk Uygulama: MEEFSTER</h4>
-      <p>Hafıza kartı oyunu, güvenli kayıt sistemi (TC kimlik, SMS, email), reklam entegrasyonu, liderlik tablosu ve referans sistemi aktif edildi.</p>
+      <div class="roadmap-phase">2026 Q2 — <span data-tr="Tamamlandı" data-en="Completed">Tamamlandı</span></div>
+      <h4 data-tr="İlk Uygulama: MEEFSTER" data-en="First App: MEEFSTER">İlk Uygulama: MEEFSTER</h4>
+      <p data-tr="Hafıza kartı oyunu, güvenli kayıt sistemi (TC kimlik, SMS, email), reklam entegrasyonu, liderlik tablosu ve referans sistemi aktif edildi." data-en="Memory card game, secure registration (ID verification, SMS, email), ad integration, leaderboard and referral system activated.">Hafıza kartı oyunu, güvenli kayıt sistemi (TC kimlik, SMS, email), reklam entegrasyonu, liderlik tablosu ve referans sistemi aktif edildi.</p>
     </div>
     <div class="roadmap-item">
       <div class="roadmap-dot active"></div>
-      <div class="roadmap-phase">2026 Q3 — Devam Ediyor</div>
-      <h4>Yönetim ve Büyüme</h4>
-      <p>Admin panel, kullanıcı yönetimi, ödül dağıtım sistemi ve topluluk araçları geliştiriliyor. Aktif kullanıcı hedefi: 10.000+</p>
+      <div class="roadmap-phase">2026 Q3 — <span data-tr="Devam Ediyor" data-en="In Progress">Devam Ediyor</span></div>
+      <h4 data-tr="Yönetim ve Büyüme" data-en="Management and Growth">Yönetim ve Büyüme</h4>
+      <p data-tr="Admin panel, kullanıcı yönetimi, ödül dağıtım sistemi ve topluluk araçları geliştiriliyor. Aktif kullanıcı hedefi: 10.000+" data-en="Admin panel, user management, reward distribution system and community tools in development. Active user target: 10,000+">Admin panel, kullanıcı yönetimi, ödül dağıtım sistemi ve topluluk araçları geliştiriliyor. Aktif kullanıcı hedefi: 10.000+</p>
     </div>
     <div class="roadmap-item">
       <div class="roadmap-dot"></div>
-      <div class="roadmap-phase">2026 Q4 — Planlanan</div>
-      <h4>Ekosistem Genişlemesi</h4>
-      <p>Yeni uygulamalar, sosyal medya entegrasyonları, partner token programı ve çoklu ağ desteği (TRON). Dikkat ekonomisi modelinin ölçeklenmesi.</p>
+      <div class="roadmap-phase">2026 Q4 — <span data-tr="Planlanan" data-en="Planned">Planlanan</span></div>
+      <h4 data-tr="Ekosistem Genişlemesi" data-en="Ecosystem Expansion">Ekosistem Genişlemesi</h4>
+      <p data-tr="Yeni uygulamalar, sosyal medya entegrasyonları, partner token programı ve çoklu ağ desteği (TRON). Dikkat ekonomisi modelinin ölçeklenmesi." data-en="New applications, social media integrations, partner token program and multi-chain support (TRON). Scaling the attention economy model.">Yeni uygulamalar, sosyal medya entegrasyonları, partner token programı ve çoklu ağ desteği (TRON). Dikkat ekonomisi modelinin ölçeklenmesi.</p>
     </div>
     <div class="roadmap-item">
       <div class="roadmap-dot"></div>
-      <div class="roadmap-phase">2027 — Vizyon</div>
-      <h4>Küresel Dijital Emek Platformu</h4>
-      <p>Uluslararası pazar açılımı, kurumsal partnerlikler, gelir paylaşım modeli ve dikkat ekonomisinin demokratikleştirilmesi. Dijital emeğin küresel standartlarını belirlemeyi hedefliyoruz.</p>
+      <div class="roadmap-phase">2027 — <span data-tr="Vizyon" data-en="Vision">Vizyon</span></div>
+      <h4 data-tr="Küresel Dijital Emek Platformu" data-en="Global Digital Labor Platform">Küresel Dijital Emek Platformu</h4>
+      <p data-tr="Uluslararası pazar açılımı, kurumsal partnerlikler, gelir paylaşım modeli ve dikkat ekonomisinin demokratikleştirilmesi. Dijital emeğin küresel standartlarını belirlemeyi hedefliyoruz." data-en="International market expansion, corporate partnerships, revenue sharing model and democratization of the attention economy. We aim to set global standards for digital labor.">Uluslararası pazar açılımı, kurumsal partnerlikler, gelir paylaşım modeli ve dikkat ekonomisinin demokratikleştirilmesi. Dijital emeğin küresel standartlarını belirlemeyi hedefliyoruz.</p>
     </div>
   </div>
 </section>
@@ -453,14 +509,14 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 <div class="community-section" id="community">
   <div class="community-inner">
     <div class="reveal">
-      <div class="section-tag">Topluluk</div>
-      <h2 class="section-title">MEEF Topluluğu</h2>
-      <p class="section-desc">Dijital emek devriminin bir parçası ol. Düşünceni paylaş, iz bırak.</p>
+      <div class="section-tag" data-tr="Topluluk" data-en="Community">Topluluk</div>
+      <h2 class="section-title" data-tr="MEEF Topluluğu" data-en="MEEF Community">MEEF Topluluğu</h2>
+      <p class="section-desc" data-tr="Dijital emek devriminin bir parçası ol. Düşünceni paylaş, iz bırak." data-en="Be part of the digital labor revolution. Share your thoughts, leave your mark.">Dijital emek devriminin bir parçası ol. Düşünceni paylaş, iz bırak.</p>
     </div>
     <div class="community-grid reveal">
       <!-- Guestbook -->
       <div class="guestbook">
-        <h3>📖 Hatıra Defteri</h3>
+        <h3 data-tr="📖 Hatıra Defteri" data-en="📖 Guestbook">📖 Hatıra Defteri</h3>
         <div class="guestbook-entries" id="gbEntries">
           <div class="gb-entry">
             <div class="gb-name">MEEF Ekibi</div>
@@ -484,15 +540,15 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
       <div class="community-stats">
         <div class="comm-stat-card">
           <div class="comm-stat-number" id="counterUsers">0</div>
-          <div class="comm-stat-label">Ekosistem Üyesi</div>
+          <div class="comm-stat-label" data-tr="Ekosistem Üyesi" data-en="Ecosystem Members">Ekosistem Üyesi</div>
         </div>
         <div class="comm-stat-card">
           <div class="comm-stat-number" id="counterMeef">0</div>
-          <div class="comm-stat-label">MEEFSTER Oyun Puanı</div>
+          <div class="comm-stat-label" data-tr="MEEFSTER Oyun Puanı" data-en="MEEFSTER Game Points">MEEFSTER Oyun Puanı</div>
         </div>
         <div class="comm-stat-card">
           <div class="comm-stat-number">2026</div>
-          <div class="comm-stat-label">Kuruluş Yılı</div>
+          <div class="comm-stat-label" data-tr="Kuruluş Yılı" data-en="Founded">Kuruluş Yılı</div>
         </div>
         <div class="social-grid">
           <a href="#" class="social-card">
@@ -515,11 +571,11 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
 
 <!-- ═══ CTA ═══ -->
 <div class="cta-section reveal">
-  <h2>Dijital Emeğinin<br><span class="gold">Değerini Bil</span></h2>
-  <p>Dikkat ekonomisinin gelirinden pay almaya hazır mısın?</p>
+  <h2 data-tr="Dijital Emeğinin Değerini Bil" data-en="Know the Value of Your Digital Labor">Dijital Emeğinin<br><span class="gold" data-tr="Değerini Bil" data-en="Know Your Worth">Değerini Bil</span></h2>
+  <p data-tr="Dikkat ekonomisinin gelirinden pay almaya hazır mısın?" data-en="Are you ready to get your share of the attention economy?">Dikkat ekonomisinin gelirinden pay almaya hazır mısın?</p>
   <div class="hero-buttons">
-    <a href="#meefster" class="btn-gold">MEEFSTER'ı Keşfet</a>
-    <a href="#community" class="btn-glass">Topluluğa Katıl</a>
+    <a href="#meefster" class="btn-gold" data-tr="MEEFSTER'ı Keşfet" data-en="Explore MEEFSTER">MEEFSTER'ı Keşfet</a>
+    <a href="#community" class="btn-glass" data-tr="Topluluğa Katıl" data-en="Join Community">Topluluğa Katıl</a>
   </div>
 </div>
 
@@ -531,7 +587,7 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
     <li><a href="#">𝕏</a></li>
     <li><a href="https://github.com/Mittim34/meef-token" target="_blank">GitHub</a></li>
   </ul>
-  <div class="footer-copy">© 2026 MEEF Ekosistemi — Dijital emeğin, gerçek değerin.</div>
+  <div class="footer-copy" data-tr="© 2026 MEEF Ekosistemi — Dijital emeğin, gerçek değerin." data-en="© 2026 MEEF Ecosystem — Your digital labor, your real value.">© 2026 MEEF Ekosistemi — Dijital emeğin, gerçek değerin.</div>
 </footer>
 
 <script>
@@ -668,6 +724,85 @@ function addGuestEntry() {
   document.getElementById('gbName').value = '';
   document.getElementById('gbMessage').value = '';
 }
+
+// ═══ THEME TOGGLE ═══
+let isDark = true;
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('light', !isDark);
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ═══ LANGUAGE TOGGLE ═══
+let currentLang = 'tr';
+function toggleLang() {
+  currentLang = currentLang === 'tr' ? 'en' : 'tr';
+  document.getElementById('langBtn').textContent = currentLang === 'tr' ? 'EN' : 'TR';
+  document.querySelectorAll('[data-tr][data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + currentLang);
+  });
+}
+
+// ═══ CARD SHUFFLE ANIMATION ═══
+const cardSets = [
+  ['🎯','💰','🎯','⭐','🏆','⭐','💰','🔥','🏆'],
+  ['🎮','💎','🎮','🌟','💎','🌟','🎲','🎲','🪙'],
+  ['🚀','💰','🚀','🔮','💰','🔮','⚡','⚡','🪙'],
+  ['🎯','🏅','🎯','💫','🏅','💫','🎪','🎪','🪙'],
+  ['🌈','💰','🌈','🎭','💰','🎭','✨','✨','🪙'],
+  ['🎯','🪙','🎯','🪙','🎮','🎮','💰','💰','🏆'],
+];
+
+let currentSet = 0;
+const gameScreen = document.getElementById('gameScreen');
+const tokenRainEl = document.getElementById('tokenRain');
+
+function shuffleCards() {
+  const cards = gameScreen.querySelectorAll('.game-card');
+  currentSet = (currentSet + 1) % cardSets.length;
+  
+  // Flip each card with stagger
+  cards.forEach((card, i) => {
+    setTimeout(() => {
+      card.classList.add('flip');
+      setTimeout(() => {
+        card.textContent = cardSets[currentSet][i];
+        card.classList.remove('flip');
+        
+        // Random match highlight
+        if (Math.random() > 0.6) {
+          card.classList.add('match');
+          setTimeout(() => card.classList.remove('match'), 1500);
+        }
+      }, 300);
+    }, i * 100);
+  });
+  
+  // Token rain after card shuffle
+  setTimeout(() => spawnTokenRain(), 1200);
+}
+
+function spawnTokenRain() {
+  const tokens = ['🪙','💰','✨','⭐'];
+  const count = 8 + Math.floor(Math.random() * 6);
+  
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const token = document.createElement('span');
+      token.className = 'rain-token';
+      token.textContent = tokens[Math.floor(Math.random() * tokens.length)];
+      token.style.left = (Math.random() * 80 + 10) + '%';
+      token.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+      token.style.animationDuration = (2 + Math.random() * 2) + 's';
+      tokenRainEl.appendChild(token);
+      
+      setTimeout(() => token.remove(), 4000);
+    }, i * 120);
+  }
+}
+
+// Auto shuffle every 3 seconds
+setInterval(shuffleCards, 3000);
 </script>
 
 </body>
