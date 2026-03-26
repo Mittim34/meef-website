@@ -488,7 +488,7 @@ footer { position:relative;z-index:1;border-top:1px solid rgba(255,255,255,0.05)
         </div>
         <div class="comm-stat-card">
           <div class="comm-stat-number" id="counterMeef">0</div>
-          <div class="comm-stat-label">MEEF Dağıtıldı</div>
+          <div class="comm-stat-label">MEEFSTER Oyun Puanı</div>
         </div>
         <div class="comm-stat-card">
           <div class="comm-stat-number">2026</div>
@@ -639,8 +639,8 @@ function animateCounter(el, target, suffix='') {
 const counterObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      animateCounter(document.getElementById('counterUsers'), 1247, '+');
-      animateCounter(document.getElementById('counterMeef'), 458000, '');
+      animateCounter(document.getElementById('counterUsers'), 12, '');
+      animateCounter(document.getElementById('counterMeef'), 23380, '');
       counterObs.disconnect();
     }
   });
